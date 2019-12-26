@@ -22,7 +22,7 @@ public class KSExportPrefabEditor
         foreach (var child in transforms)
         {
             Image image = child.gameObject.GetComponent<Image>();
-            if (image != null)
+            if (image != null && image.sprite != null)
             {
                 InsetDictionary(images, image.sprite.name, image.sprite.name);
             }
