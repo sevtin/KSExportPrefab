@@ -7,7 +7,7 @@ using System.IO;
 public class KSPrefabComponmentEditor
 {
     [MenuItem("KSMenu/Export Prefab")]
-    static void PrefabComponment()
+    static void ExportPrefab()
     {
         GameObject target = Selection.activeTransform.gameObject;
 

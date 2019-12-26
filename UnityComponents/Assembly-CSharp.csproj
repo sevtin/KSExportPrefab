@@ -68,19 +68,19 @@
     <None Include="Assets\Resources\Text\image.txt" />
     <None Include="Assets\Resources\Text\script.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Unity/Unity2018.4.0f1/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -284,13 +284,13 @@
       <HintPath>D:/Unity/Unity2018.4.0f1/Unity/Editor/Data/UnityExtensions/Unity/UnitySpatialTracking/RuntimeEditor/UnityEngine.SpatialTracking.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>H:/Desktop/EN/UnityComponents/UnityComponents/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="netstandard">
       <HintPath>D:/Unity/Unity2018.4.0f1/Unity/Editor/Data/NetStandard/ref/2.0.0/netstandard.dll</HintPath>
