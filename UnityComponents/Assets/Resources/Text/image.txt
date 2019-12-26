@@ -1,0 +1,5 @@
+turntable_bg
+logo_en-US
+Background
+ic_launcher-web
+General_803
