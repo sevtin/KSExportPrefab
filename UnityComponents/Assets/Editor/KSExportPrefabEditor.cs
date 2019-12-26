@@ -4,7 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 
-public class KSPrefabComponmentEditor
+public class KSExportPrefabEditor
 {
     [MenuItem("KSMenu/Export Prefab")]
     static void ExportPrefab()

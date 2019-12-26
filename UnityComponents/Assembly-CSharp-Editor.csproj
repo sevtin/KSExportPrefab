@@ -61,7 +61,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Assets\Editor\FindAssetsEditor.cs" />
-    <Compile Include="Assets\Editor\KSPrefabComponmentEditor.cs" />
+    <Compile Include="Assets\Editor\KSExportPrefabEditor.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
