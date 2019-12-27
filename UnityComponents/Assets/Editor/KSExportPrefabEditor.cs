@@ -40,11 +40,11 @@ public class KSExportPrefabEditor
         Dictionary<string, string> imagesPath = GetAssetPaths(images, "png");
         Dictionary<string, string> scriptsPath = GetAssetPaths(scripts, "cs");
 
-        string exportPath = @"H:\UnityProject\CopyAss\";
+        string exportPath = @"H:\UnityProject\CopyAss";
 #if UNITY_STANDALONE_WIN
         exportPath = exportPath.Replace(@"\", "/");
 #endif
-
+        exportPath = exportPath + "/";
         bool overwrite = true;
         foreach (string path in prefabsPath.Keys)
         {
