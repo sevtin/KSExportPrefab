@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using System.IO;
 using System.Collections.Generic;
+using System;
 
 public class KSExportPrefabEditor
 {
@@ -15,10 +16,13 @@ public class KSExportPrefabEditor
         Dictionary<string, string> prefabs = new Dictionary<string, string>();
         Dictionary<string, string> images = new Dictionary<string, string>();
         Dictionary<string, string> scripts = new Dictionary<string, string>();
+        Dictionary<string, string> supers = new Dictionary<string, string>();
 
         InsetDictionary(prefabs, target.name, target.name);
 
         Transform[] transforms = target.GetComponentsInChildren<Transform>();
+        Type monoType = new MonoBehaviour().GetType();
+
         foreach (var child in transforms)
         {
             Image image = child.gameObject.GetComponent<Image>();
@@ -28,10 +32,21 @@ public class KSExportPrefabEditor
             }
             foreach (var component in child.GetComponents<Component>())
             {
-                string componentType = component.GetType().ToString();
+                Type type = component.GetType();
+                string componentType = type.ToString();
                 if (componentType.StartsWith("UnityEngine") == false)
                 {
                     InsetDictionary(scripts, componentType, componentType);
+
+                    while (type != monoType)
+                    {
+                        type = type.BaseType;
+                        if(type == monoType)
+                        {
+                            break;
+                        }
+                        InsetDictionary(supers, type.ToString(), type.ToString());
+                    }
                 }
             }
         }
@@ -39,29 +54,17 @@ public class KSExportPrefabEditor
         Dictionary<string, string> prefabsPath = GetAssetPaths(prefabs, "prefab");
         Dictionary<string, string> imagesPath = GetAssetPaths(images, "png");
         Dictionary<string, string> scriptsPath = GetAssetPaths(scripts, "cs");
+        Dictionary<string, string> supersPath = GetAssetPaths(supers, "cs");
 
-        string exportPath = @"H:\UnityProject\CopyAss";
-#if UNITY_STANDALONE_WIN
-        exportPath = exportPath.Replace(@"\", "/");
-#endif
-        exportPath = exportPath + "/";
-        bool overwrite = true;
-        foreach (string path in prefabsPath.Keys)
-        {
-            ExportAssets(path, exportPath, overwrite);
-        }
-        foreach (string path in imagesPath.Keys)
-        {
-            ExportAssets(path, exportPath, overwrite);
-        }
-        foreach (string path in scriptsPath.Keys)
-        {
-            ExportAssets(path, exportPath, overwrite);
-        }
+        ExportAssets(prefabsPath);
+        ExportAssets(imagesPath);
+        ExportAssets(scriptsPath);
+        ExportAssets(supersPath);
 
         SaveExportList("ExportPrefabs", prefabsPath);
         SaveExportList("ExportImages", imagesPath);
         SaveExportList("ExportScripts", scriptsPath);
+        SaveExportList("ExportSupers", supersPath);
 
         Debug.Log("执行完毕");
     }
@@ -113,6 +116,20 @@ public class KSExportPrefabEditor
             return assetPath;
         }
         return string.Empty;
+    }
+
+    static void ExportAssets(Dictionary<string, string> sourcePaths)
+    {
+        string exportPath = @"H:\UnityProject\CopyAss";
+#if UNITY_STANDALONE_WIN
+        exportPath = exportPath.Replace(@"\", "/");
+#endif
+        exportPath = exportPath + "/";
+        bool overwrite = true;
+        foreach (string path in sourcePaths.Keys)
+        {
+            ExportAssets(path, exportPath, overwrite);
+        }
     }
 
     static void ExportAssets(string sourcePath, string exportPath, bool overwrite)

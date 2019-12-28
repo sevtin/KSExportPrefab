@@ -63,10 +63,17 @@
     <Compile Include="Assets\Scripts\UI\UIAffirmButton.cs" />
     <Compile Include="Assets\Scripts\UI\UIBackgroundPanel.cs" />
     <Compile Include="Assets\Scripts\UI\UIBarPanel.cs" />
+    <Compile Include="Assets\Scripts\UI\UIChildGameObject.cs" />
     <Compile Include="Assets\Scripts\UI\UIIconImage.cs" />
     <Compile Include="Assets\Scripts\UI\UIIconImageView.cs" />
+    <Compile Include="Assets\Scripts\UI\UISuperGameObject.cs" />
+    <Compile Include="Assets\Scripts\UI\UITopClass.cs" />
     <None Include="Assets\Resources\Text\image.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportScripts.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportSupers.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportImages.txt" />
     <None Include="Assets\Resources\Text\script.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportPrefabs.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/UnityComponents/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
