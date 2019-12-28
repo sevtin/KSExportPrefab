@@ -11,6 +11,12 @@ public class KSExportPrefabEditor
     [MenuItem("KSMenu/Export Prefab")]
     static void ExportPrefab()
     {
+        string exportPath = @"H:\UnityProject\CopyAss";
+#if UNITY_STANDALONE_WIN
+        exportPath = exportPath.Replace(@"\", "/");
+#endif
+        exportPath = exportPath + "/";
+
         GameObject target = Selection.activeTransform.gameObject;
 
         Dictionary<string, string> prefabs = new Dictionary<string, string>();
@@ -41,7 +47,7 @@ public class KSExportPrefabEditor
                     while (type != monoType)
                     {
                         type = type.BaseType;
-                        if(type == monoType)
+                        if (type == monoType)
                         {
                             break;
                         }
@@ -56,15 +62,15 @@ public class KSExportPrefabEditor
         Dictionary<string, string> scriptsPath = GetAssetPaths(scripts, "cs");
         Dictionary<string, string> supersPath = GetAssetPaths(supers, "cs");
 
-        ExportAssets(prefabsPath);
-        ExportAssets(imagesPath);
-        ExportAssets(scriptsPath);
-        ExportAssets(supersPath);
+        ExportAssets(prefabsPath, exportPath);
+        ExportAssets(imagesPath, exportPath);
+        ExportAssets(scriptsPath, exportPath);
+        ExportAssets(supersPath, exportPath);
 
-        SaveExportList("ExportPrefabs", prefabsPath);
-        SaveExportList("ExportImages", imagesPath);
-        SaveExportList("ExportScripts", scriptsPath);
-        SaveExportList("ExportSupers", supersPath);
+        NoteExportList("ExportPrefabs", prefabsPath);
+        NoteExportList("ExportImages", imagesPath);
+        NoteExportList("ExportScripts", scriptsPath);
+        NoteExportList("ExportSupers", supersPath);
 
         Debug.Log("执行完毕");
     }
@@ -83,9 +89,9 @@ public class KSExportPrefabEditor
         }
     }
 
-    static void InsetDictionary(Dictionary<string, string> ditc,string key,string value)
+    static void InsetDictionary(Dictionary<string, string> ditc, string key, string value)
     {
-        if(ditc.ContainsKey(key) == false)
+        if (ditc.ContainsKey(key) == false)
         {
             ditc.Add(key, value);
         }
@@ -118,13 +124,8 @@ public class KSExportPrefabEditor
         return string.Empty;
     }
 
-    static void ExportAssets(Dictionary<string, string> sourcePaths)
+    static void ExportAssets(Dictionary<string, string> sourcePaths, string exportPath)
     {
-        string exportPath = @"H:\UnityProject\CopyAss";
-#if UNITY_STANDALONE_WIN
-        exportPath = exportPath.Replace(@"\", "/");
-#endif
-        exportPath = exportPath + "/";
         bool overwrite = true;
         foreach (string path in sourcePaths.Keys)
         {
@@ -151,15 +152,15 @@ public class KSExportPrefabEditor
         File.Copy(sourcePath + ".meta", Path.Combine(exportPath, Path.GetFileName(fileName + ".meta")), overwrite);
     }
 
-    static void SaveExportList(string filename, Dictionary<string, string> assets)
+    static void NoteExportList(string filename, Dictionary<string, string> assets)
     {
-        string savePath = Application.dataPath + "/Resources/ExportNotes/";
+        string notePath = Application.dataPath + "/Resources/ExportNotes/";
 
-        if (!Directory.Exists(savePath))
+        if (!Directory.Exists(notePath))
         {
-            Directory.CreateDirectory(savePath);
+            Directory.CreateDirectory(notePath);
         }
-        savePath = savePath + filename + ".txt";
+        notePath = notePath + filename + ".txt";
 
         string context = string.Empty;
         foreach (string key in assets.Keys)
@@ -168,7 +169,7 @@ public class KSExportPrefabEditor
         }
 
         // 文件流创建一个文本文件
-        FileStream file = new FileStream(savePath, FileMode.Create);
+        FileStream file = new FileStream(notePath, FileMode.Create);
         //得到字符串的UTF8 数据流
         byte[] bts = System.Text.Encoding.UTF8.GetBytes(context);
         // 文件写入数据流
