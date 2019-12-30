@@ -1,4 +1,0 @@
-Assets/Resources/Images/turntable_bg.png
-Assets/Resources/Images/logo_en-US.png
-Assets/Resources/Images/ic_launcher-web.png
-Assets/Resources/Images/General_803.png

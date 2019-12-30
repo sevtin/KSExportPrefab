@@ -1,2 +1,0 @@
-Assets/Scripts/UI/UISuperGameObject.cs
-Assets/Scripts/UI/UITopClass.cs

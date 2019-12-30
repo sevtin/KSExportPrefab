@@ -1,4 +1,0 @@
-UIBackgroundPanel.cs
-UIAffirmButton.cs
-UIBarPanel.cs
-UIIconImage.cs

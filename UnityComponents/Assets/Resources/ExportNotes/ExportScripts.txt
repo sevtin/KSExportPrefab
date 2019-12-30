@@ -1,5 +1,0 @@
-Assets/Scripts/UI/UIBackgroundPanel.cs
-Assets/Scripts/UI/UIAffirmButton.cs
-Assets/Scripts/UI/UIBarPanel.cs
-Assets/Scripts/UI/UIIconImage.cs
-Assets/Scripts/UI/UIChildGameObject.cs
