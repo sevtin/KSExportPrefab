@@ -8,10 +8,11 @@ using System;
 
 public class KSExportPrefabEditor
 {
+
     [MenuItem("KSMenu/Export Prefab")]
     static void ExportPrefab()
     {
-        string exportPath = @"H:\UnityProject\KSExportPrefab";
+        string exportPath = @"I:\GitHub\shaderGame";
 #if UNITY_STANDALONE_WIN
         exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -19,30 +20,23 @@ public class KSExportPrefabEditor
 
         GameObject target = Selection.activeTransform.gameObject;
 
-        Dictionary<string, string> prefabs = new Dictionary<string, string>();
-        Dictionary<string, string> images = new Dictionary<string, string>();
-        Dictionary<string, string> scripts = new Dictionary<string, string>();
-        Dictionary<string, string> supers = new Dictionary<string, string>();
+        //记录导出的资源
+        Dictionary<string, Dictionary<string, string>> exportAssets = new Dictionary<string, Dictionary<string, string>>();
 
-        InsetDictionary(prefabs, target.name, target.name);
+        InsetDictionary(exportAssets, KSAssetsType.Prefab, target.name);
 
         Transform[] transforms = target.GetComponentsInChildren<Transform>();
         Type monoType = new MonoBehaviour().GetType();
 
         foreach (var child in transforms)
         {
-            Image image = child.gameObject.GetComponent<Image>();
-            if (image != null && image.sprite != null)
-            {
-                InsetDictionary(images, image.sprite.name, image.sprite.name);
-            }
             foreach (var component in child.GetComponents<Component>())
             {
                 Type type = component.GetType();
                 string componentType = type.ToString();
-                if (componentType.StartsWith("UnityEngine") == false)
+                if (componentType.StartsWith(KSComponentType.UnityEngine) == false)
                 {
-                    InsetDictionary(scripts, componentType, componentType);
+                    InsetDictionary(exportAssets, KSAssetsType.Script, componentType);
 
                     while (type != monoType)
                     {
@@ -51,27 +45,57 @@ public class KSExportPrefabEditor
                         {
                             break;
                         }
-                        InsetDictionary(supers, type.ToString(), type.ToString());
+                        InsetDictionary(exportAssets, KSAssetsType.Super, type.ToString());
+                    }
+                }
+                else if(type.Name == KSComponentType.Image)
+                {
+                    Image image = component as Image;
+                    if (image.sprite != null)
+                    {
+                        InsetDictionary(exportAssets, KSAssetsType.Image, image.sprite.name);
+                    }
+                }
+                else if (type.Name == KSComponentType.ParticleSystemRenderer)
+                {
+                    ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
+                    Material material = systemRenderer.sharedMaterial;
+                    if (material != null)
+                    {
+                        string materialName = material.name;
+                        if (materialName.EndsWith(KSComponentType.Instance))
+                        {
+                            materialName = materialName.Replace(KSComponentType.Instance, "");
+                        }
+                        InsetDictionary(exportAssets, KSAssetsType.Material, materialName);
+                        if (material.shader != null)
+                        {
+                            string shaderName = material.shader.name;
+                            shaderName = shaderName.Replace("/", "-");
+                            InsetDictionary(exportAssets, KSAssetsType.Shader, shaderName);
+                        }
+                        if (material.mainTexture != null)
+                        {
+                            InsetDictionary(exportAssets, KSAssetsType.Image, material.mainTexture.name);
+                        }
                     }
                 }
             }
         }
 
-        Dictionary<string, string> prefabsPath = GetAssetPaths(prefabs, "prefab");
-        Dictionary<string, string> imagesPath = GetAssetPaths(images, "png");
-        Dictionary<string, string> scriptsPath = GetAssetPaths(scripts, "cs");
-        Dictionary<string, string> supersPath = GetAssetPaths(supers, "cs");
+        //资源路劲
+        Dictionary<string, Dictionary<string, string>> assetsPaths = new Dictionary<string, Dictionary<string, string>>();
+        foreach (string type in exportAssets.Keys)
+        {
+            assetsPaths.Add(type, GetAssetPaths(exportAssets[type], KSAssetsType.GetSuffixName(type)));
+        }
 
-        ExportAssets(prefabsPath, exportPath);
-        ExportAssets(imagesPath, exportPath);
-        ExportAssets(scriptsPath, exportPath);
-        ExportAssets(supersPath, exportPath);
-
-        NoteExportList("ExportPrefabs", prefabsPath);
-        NoteExportList("ExportImages", imagesPath);
-        NoteExportList("ExportScripts", scriptsPath);
-        NoteExportList("ExportSupers", supersPath);
-
+        foreach (string type in assetsPaths.Keys)
+        {
+            //导出资源
+            ExportAssets(assetsPaths[type], exportPath);
+            NoteExportList(type, assetsPaths[type]);
+        }
         Debug.Log("执行完毕");
     }
 
@@ -89,11 +113,23 @@ public class KSExportPrefabEditor
         }
     }
 
-    static void InsetDictionary(Dictionary<string, string> ditc, string key, string value)
+    static void InsetDictionary(Dictionary<string, Dictionary<string, string>> dict, string type, string value)
     {
-        if (ditc.ContainsKey(key) == false)
+        if(value == string.Empty)
         {
-            ditc.Add(key, value);
+            return;
+        }
+        if (dict.ContainsKey(type) == false)
+        {
+            dict.Add(type, new Dictionary<string, string>());
+            dict[type].Add(value, value);
+        }
+        else
+        {
+            if (dict[type].ContainsKey(value) == false)
+            {
+                dict[type].Add(value, value);
+            }
         }
     }
 
@@ -108,7 +144,10 @@ public class KSExportPrefabEditor
                 var assetPath = GetAssetPath(resules[i], filter, type);
                 if (assetPath != string.Empty)
                 {
-                    InsetDictionary(paths, assetPath, assetPath);
+                    if (paths.ContainsKey(assetPath) == false)
+                    {
+                        paths.Add(assetPath, assetPath);
+                    }
                 }
             }
         }
@@ -184,4 +223,41 @@ public class KSExportPrefabEditor
             file.Dispose();
         }
     }
+}
+
+public static class KSAssetsType
+{
+    public const string Image = "KSImage";
+    public const string Prefab = "KSPrefab";
+    public const string Script = "KSScript";
+    public const string Super = "KSSuper";
+    public const string Shader = "KSShader";
+    public const string Material = "KSMaterial";
+
+    public static string GetSuffixName(string type)
+    {
+        switch (type)
+        {
+            case Image:
+                return "png";
+            case Prefab:
+                return "prefab";
+            case Script:
+            case Super:
+                return "cs";
+            case Material:
+                return "mat";
+            case Shader:
+                return "shader";
+        }
+        return string.Empty;
+    }
+}
+
+public static class KSComponentType
+{
+    public const String UnityEngine = "UnityEngine";
+    public const string Image = "Image";
+    public const String ParticleSystemRenderer = "ParticleSystemRenderer";
+    public const String Instance = " (Instance)";
 }
