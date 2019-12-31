@@ -256,8 +256,8 @@ public static class KSAssetsType
 
 public static class KSComponentType
 {
-    public const String UnityEngine = "UnityEngine";
+    public const string UnityEngine = "UnityEngine";
     public const string Image = "Image";
-    public const String ParticleSystemRenderer = "ParticleSystemRenderer";
-    public const String Instance = " (Instance)";
+    public const string ParticleSystemRenderer = "ParticleSystemRenderer";
+    public const string Instance = " (Instance)";
 }
