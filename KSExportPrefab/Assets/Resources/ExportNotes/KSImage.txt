@@ -3,4 +3,4 @@ Assets/Resources/Images/logo_en-US.png
 Assets/Resources/Images/ic_launcher-web.png
 Assets/Resources/Images/General_803.png
 Assets/Resources/Images/Model_CN_2.png
-Assets/Resources/Images/ic_launcher-web_log.png
+Assets/Resources/Images/star_gold.jpg

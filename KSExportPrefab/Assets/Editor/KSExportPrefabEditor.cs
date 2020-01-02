@@ -96,9 +96,19 @@ public class KSExportPrefabEditor
     static void NotesAssetsPath(Dictionary<string, Dictionary<string, string>> dict, string type, UnityEngine.Object obj)
     {
         string assetPath = AssetDatabase.GetAssetPath(obj);
-        if (assetPath.EndsWith(KSAssetsType.GetSuffixName(type)))
+        if (type == KSAssetsType.Image)
         {
-            InsetDictionary(dict, type, assetPath);
+            if (assetPath.EndsWith(KSSuffix.png) || assetPath.EndsWith(KSSuffix.jpg))
+            {
+                InsetDictionary(dict, type, assetPath);
+            }
+        }
+        else
+        {
+            if (assetPath.EndsWith(KSAssetsType.GetSuffixName(type)))
+            {
+                InsetDictionary(dict, type, assetPath);
+            }
         }
     }
 
@@ -180,7 +190,6 @@ public class KSExportPrefabEditor
                 {
                     return assetPath;
                 }
-
             }
         }
         return assetPath;
@@ -308,5 +317,4 @@ public static class KSComponentType
     public const string Image = "Image";
     public const string SpriteRenderer = "SpriteRenderer";
     public const string ParticleSystemRenderer = "ParticleSystemRenderer";
-    public const string Instance = " (Instance)";
 }
