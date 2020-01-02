@@ -28,56 +28,60 @@ public class KSExportPrefabEditor
         Transform[] transforms = target.GetComponentsInChildren<Transform>();
         Type monoType = new MonoBehaviour().GetType();
 
-        foreach (var child in transforms)
+        foreach (Transform transform in transforms)
         {
-            foreach (var component in child.GetComponents<Component>())
+            for (int i = 0; i < transform.childCount; i++)
             {
-                Type type = component.GetType();
-                string componentName = type.ToString();
-                if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
-                {//2、Script
-                    InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
-                    while (type != monoType)
-                    {
-                        type = type.BaseType;
-                        if (type == monoType)
-                        {
-                            break;
-                        }
-                        InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
-                    }
-                }
-                else if (type.Name == KSComponentType.Image)
-                {//3、Image
-                    Image image = component as Image;
-                    if(image.sprite != null)
-                    {
-                        NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
-                    }
-                    
-                }
-                else if (type.Name == KSComponentType.SpriteRenderer)
-                {//4、SpriteRenderer
-                    SpriteRenderer spriteRenderer = component as SpriteRenderer;
-                    if(spriteRenderer.sprite != null)
-                    {
-                        NotesAssetsPath(exportAssets, KSAssetsType.Image, spriteRenderer.sprite);
-                    }
-                }
-                else if (type.Name == KSComponentType.ParticleSystemRenderer)
+                GameObject child = transform.GetChild(i).gameObject;
+                foreach (Component component in child.GetComponents<Component>())
                 {
-                    ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
-                    Material material = systemRenderer.sharedMaterial;
-                    if (material != null)
-                    {//5、Material
-                        NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
-                        if (material.shader != null)
-                        {//6、Shader
-                            NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
+                    Type type = component.GetType();
+                    string componentName = type.ToString();
+                    if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
+                    {//2、Script
+                        InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
+                        while (type != monoType)
+                        {
+                            type = type.BaseType;
+                            if (type == monoType)
+                            {
+                                break;
+                            }
+                            InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
                         }
-                        if (material.mainTexture != null)
-                        {//7、Image
-                            NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
+                    }
+                    else if (type.Name == KSComponentType.Image)
+                    {//3、Image
+                        Image image = component as Image;
+                        if (image.sprite != null)
+                        {
+                            NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
+                        }
+
+                    }
+                    else if (type.Name == KSComponentType.SpriteRenderer)
+                    {//4、SpriteRenderer
+                        SpriteRenderer spriteRenderer = component as SpriteRenderer;
+                        if (spriteRenderer.sprite != null)
+                        {
+                            NotesAssetsPath(exportAssets, KSAssetsType.Image, spriteRenderer.sprite);
+                        }
+                    }
+                    else if (type.Name == KSComponentType.ParticleSystemRenderer)
+                    {
+                        ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
+                        Material material = systemRenderer.sharedMaterial;
+                        if (material != null)
+                        {//5、Material
+                            NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
+                            if (material.shader != null)
+                            {//6、Shader
+                                NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
+                            }
+                            if (material.mainTexture != null)
+                            {//7、Image
+                                NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
+                            }
                         }
                     }
                 }
@@ -265,7 +269,8 @@ public class KSExportPrefabEditor
     }
 }
 
-public static class KSPath {
+public static class KSPath
+{
     public const string Assets = "Assets";
     public const string ExportNotes = "/Resources/ExportNotes/";
 }
@@ -278,7 +283,7 @@ public static class KSAssetsType
     public const string Super = "KSSuper";
     public const string Shader = "KSShader";
     public const string Material = "KSMaterial";
-    
+
     public static string GetSuffixName(string type)
     {
         switch (type)
