@@ -1,1 +1,2 @@
 Assets/Resources/Shader/custom-add-ui.shader
+Assets/Resources/Shader/custom-particle-alphablend_rgba.shader

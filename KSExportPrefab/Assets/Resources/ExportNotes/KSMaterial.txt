@@ -1,1 +1,2 @@
 Assets/Resources/Material/MyMaterial.mat
+Assets/Resources/Material/RgbaMaterial.mat

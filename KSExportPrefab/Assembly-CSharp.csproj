@@ -73,6 +73,7 @@
     <None Include="Assets\Resources\ExportNotes\KSShader.txt" />
     <None Include="Assets\Resources\Shader\custom-add-ui.shader" />
     <None Include="Assets\Resources\ExportNotes\KSPrefab.txt" />
+    <None Include="Assets\Resources\Shader\custom-particle-alphablend_rgba.shader" />
     <None Include="Assets\Resources\ExportNotes\KSImage.txt" />
     <None Include="Assets\Resources\ExportNotes\KSMaterial.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
