@@ -63,19 +63,19 @@
     <Compile Include="Assets\Editor\FindAssetsEditor.cs" />
     <Compile Include="Assets\Editor\KSExportPrefabEditor.cs" />
     <Reference Include="Unity.TextMeshPro.Editor">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.PackageManagerUI.Editor">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.PackageManagerUI.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.CollabProxy.Editor">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.CollabProxy.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.TextMeshPro">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.TextMeshPro.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.DataPrivacy">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.Analytics.DataPrivacy.dll</HintPath>
     </Reference>
     <Reference Include="UnityEngine.AIModule">
       <HintPath>D:/Unity/Unity2018.4.0f1/Unity/Editor/Data/Managed/UnityEngine/UnityEngine.AIModule.dll</HintPath>
@@ -318,19 +318,19 @@
       <HintPath>C:/Program Files (x86)/Microsoft Visual Studio Tools for Unity/15.0/Editor/SyntaxTree.VisualStudio.Unity.Bridge.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Advertisements">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.ads@2.0.8/Editor/UnityEditor.Advertisements.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Editor">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Editor.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.StandardEvents">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.StandardEvents.dll</HintPath>
     </Reference>
     <Reference Include="Unity.Analytics.Tracker">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.analytics@3.2.2/Unity.Analytics.Tracker.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.Purchasing">
-      <HintPath>I:/GitHub/ExportPrefab/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
+      <HintPath>I:/GitHub/ExportPrefab/KSExportPrefab/Library/PackageCache/com.unity.purchasing@2.0.3/Editor/UnityEditor.Purchasing.dll</HintPath>
     </Reference>
     <Reference Include="UnityEditor.iOS.Extensions.Xcode">
       <HintPath>D:/Unity/Unity2018.4.0f1/Unity/Editor/Data/PlaybackEngines/iOSSupport/UnityEditor.iOS.Extensions.Xcode.dll</HintPath>

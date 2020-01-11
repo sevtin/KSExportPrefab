@@ -12,7 +12,7 @@ public class KSExportPrefabEditor
     [MenuItem("KSMenu/Export Prefab")]
     static void ExportPrefab()
     {
-        string exportPath = @"I:\GitHub\ShareGame";
+        string exportPath = @"H:\UnityProject\ASDF\";
 #if UNITY_STANDALONE_WIN
         exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -30,60 +30,16 @@ public class KSExportPrefabEditor
 
         foreach (Transform transform in transforms)
         {
+            foreach (Component component in transform.GetComponents<Component>())
+            {
+                RecordExportAsset(exportAssets, component, monoType);
+            }
             for (int i = 0; i < transform.childCount; i++)
             {
                 GameObject child = transform.GetChild(i).gameObject;
                 foreach (Component component in child.GetComponents<Component>())
                 {
-                    Type type = component.GetType();
-                    string componentName = type.ToString();
-                    if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
-                    {//2、Script
-                        InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
-                        while (type != monoType)
-                        {
-                            type = type.BaseType;
-                            if (type == monoType)
-                            {
-                                break;
-                            }
-                            InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
-                        }
-                    }
-                    else if (type.Name == KSComponentType.Image)
-                    {//3、Image
-                        Image image = component as Image;
-                        if (image.sprite != null)
-                        {
-                            NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
-                        }
-
-                    }
-                    else if (type.Name == KSComponentType.SpriteRenderer)
-                    {//4、SpriteRenderer
-                        SpriteRenderer spriteRenderer = component as SpriteRenderer;
-                        if (spriteRenderer.sprite != null)
-                        {
-                            NotesAssetsPath(exportAssets, KSAssetsType.Image, spriteRenderer.sprite);
-                        }
-                    }
-                    else if (type.Name == KSComponentType.ParticleSystemRenderer)
-                    {
-                        ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
-                        Material material = systemRenderer.sharedMaterial;
-                        if (material != null)
-                        {//5、Material
-                            NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
-                            if (material.shader != null)
-                            {//6、Shader
-                                NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
-                            }
-                            if (material.mainTexture != null)
-                            {//7、Image
-                                NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
-                            }
-                        }
-                    }
+                    RecordExportAsset(exportAssets, component, monoType);
                 }
             }
         }
@@ -97,6 +53,64 @@ public class KSExportPrefabEditor
         Debug.Log("执行完毕");
     }
 
+    static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component, Type monoType)
+    {
+        Type type = component.GetType();
+        string componentName = type.ToString();
+        if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
+        {//2、Script
+            InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
+            while (type != monoType)
+            {
+                type = type.BaseType;
+                if (type == monoType)
+                {
+                    break;
+                }
+                InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
+            }
+            //2.1 image
+            Image image = component.GetComponent<Image>();
+            if(image != null && image.sprite != null)
+            {
+                NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
+            }
+        }
+        else if (type.Name == KSComponentType.Image)
+        {//3、Image
+            Image image = component as Image;
+            if (image.sprite != null)
+            {
+                NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
+            }
+
+        }
+        else if (type.Name == KSComponentType.SpriteRenderer)
+        {//4、SpriteRenderer
+            SpriteRenderer spriteRenderer = component as SpriteRenderer;
+            if (spriteRenderer.sprite != null)
+            {
+                NotesAssetsPath(exportAssets, KSAssetsType.Image, spriteRenderer.sprite);
+            }
+        }
+        else if (type.Name == KSComponentType.ParticleSystemRenderer)
+        {
+            ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
+            Material material = systemRenderer.sharedMaterial;
+            if (material != null)
+            {//5、Material
+                NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
+                if (material.shader != null)
+                {//6、Shader
+                    NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
+                }
+                if (material.mainTexture != null)
+                {//7、Image
+                    NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
+                }
+            }
+        }
+    }
     static void NotesAssetsPath(Dictionary<string, Dictionary<string, string>> dict, string type, UnityEngine.Object obj)
     {
         string assetPath = AssetDatabase.GetAssetPath(obj);
