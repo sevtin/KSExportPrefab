@@ -12,7 +12,7 @@ public class KSExportPrefabEditor
     [MenuItem("KSMenu/Export Prefab")]
     static void ExportPrefab()
     {
-        string exportPath = @"H:\UnityProject\ASDF\";
+        string exportPath = @"I:\GitHub\UISuper\UISuper\UISuper";
 #if UNITY_STANDALONE_WIN
         exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -23,8 +23,28 @@ public class KSExportPrefabEditor
 
         //1、Prefab
         GameObject target = Selection.activeTransform.gameObject;
-        InsetDictionary(exportAssets, KSAssetsType.Prefab, GetAssetPath(target.name, KSAssetsType.Prefab));
+        RecordPrefab(exportAssets, target);
 
+        foreach (string type in exportAssets.Keys)
+        {
+            //导出资源
+            ExportAssets(exportAssets[type], exportPath);
+            NoteExportList(type, exportAssets[type]);
+        }
+        Debug.Log("执行完毕");
+    }
+
+    static void RecordPrefab(Dictionary<string, Dictionary<string, string>> exportAssets, GameObject target, KSObjectType type = KSObjectType.Prefab)
+    {
+        if(target == null)
+        {
+            return;
+        }
+        if(type == KSObjectType.Prefab)
+        {
+            InsetDictionary(exportAssets, KSAssetsType.Prefab, GetAssetPath(target.name, KSAssetsType.Prefab));
+        }
+        
         Transform[] transforms = target.GetComponentsInChildren<Transform>();
         Type monoType = new MonoBehaviour().GetType();
 
@@ -43,23 +63,15 @@ public class KSExportPrefabEditor
                 }
             }
         }
-
-        foreach (string type in exportAssets.Keys)
-        {
-            //导出资源
-            ExportAssets(exportAssets[type], exportPath);
-            NoteExportList(type, exportAssets[type]);
-        }
-        Debug.Log("执行完毕");
     }
-
     static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component, Type monoType)
     {
         Type type = component.GetType();
         string componentName = type.ToString();
         if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
-        {//2、Script
+        {//1、Script
             InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
+            
             while (type != monoType)
             {
                 type = type.BaseType;
@@ -69,48 +81,76 @@ public class KSExportPrefabEditor
                 }
                 InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
             }
-            //2.1 image
+            //1.1 image
             Image image = component.GetComponent<Image>();
-            if(image != null && image.sprite != null)
+            if (image != null)
             {
-                NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
+                RecordSprite(exportAssets, image.sprite);
+            }
+            //1.2 RawImage
+            RawImage rawImage = component.GetComponent<RawImage>();
+            if(rawImage != null)
+            {
+                RecordTexture(exportAssets, rawImage.mainTexture);
+                RecordMaterial(exportAssets, rawImage.material);
             }
         }
         else if (type.Name == KSComponentType.Image)
-        {//3、Image
+        {//2、Image
             Image image = component as Image;
-            if (image.sprite != null)
-            {
-                NotesAssetsPath(exportAssets, KSAssetsType.Image, image.sprite);
-            }
-
+            RecordSprite(exportAssets, image.sprite);
+        }
+        else if (type.Name == KSComponentType.RawImage)
+        {//3、RawImage
+            RawImage rawImage = component as RawImage;
+            RecordTexture(exportAssets, rawImage.mainTexture);
+            RecordMaterial(exportAssets, rawImage.material);
         }
         else if (type.Name == KSComponentType.SpriteRenderer)
         {//4、SpriteRenderer
             SpriteRenderer spriteRenderer = component as SpriteRenderer;
-            if (spriteRenderer.sprite != null)
-            {
-                NotesAssetsPath(exportAssets, KSAssetsType.Image, spriteRenderer.sprite);
-            }
+            RecordSprite(exportAssets, spriteRenderer.sprite);
         }
         else if (type.Name == KSComponentType.ParticleSystemRenderer)
-        {
+        {//5、ParticleSystemRenderer
             ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
-            Material material = systemRenderer.sharedMaterial;
-            if (material != null)
-            {//5、Material
-                NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
-                if (material.shader != null)
-                {//6、Shader
-                    NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
-                }
-                if (material.mainTexture != null)
-                {//7、Image
-                    NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
-                }
-            }
+            RecordMaterial(exportAssets, systemRenderer.sharedMaterial);
         }
     }
+
+    static void RecordTexture(Dictionary<string, Dictionary<string, string>> exportAssets, Texture texture)
+    {
+        if (texture == null)
+        {
+            return;
+        }
+        NotesAssetsPath(exportAssets, KSAssetsType.Image, texture);
+    }
+    static void RecordSprite(Dictionary<string, Dictionary<string, string>> exportAssets, Sprite sprite)
+    {
+        if (sprite == null)
+        {
+            return;
+        }
+        NotesAssetsPath(exportAssets, KSAssetsType.Image, sprite);
+    }
+    static void RecordMaterial(Dictionary<string, Dictionary<string, string>> exportAssets, Material material)
+    {
+        if(material == null)
+        {
+            return;
+        }
+        NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
+        if (material.shader != null)
+        {//6、Shader
+            NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
+        }
+        if (material.mainTexture != null)
+        {//7、Image
+            NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
+        }
+    }
+
     static void NotesAssetsPath(Dictionary<string, Dictionary<string, string>> dict, string type, UnityEngine.Object obj)
     {
         string assetPath = AssetDatabase.GetAssetPath(obj);
@@ -334,6 +374,22 @@ public static class KSComponentType
 {
     public const string UnityEngine = "UnityEngine";
     public const string Image = "Image";
+    public const string RawImage = "RawImage";
     public const string SpriteRenderer = "SpriteRenderer";
     public const string ParticleSystemRenderer = "ParticleSystemRenderer";
+    public const string Texture = "Texture";
+}
+
+enum KSObjectType
+{
+    Prefab,
+    Obj,
+}
+
+public class KSDebug
+{
+    public static void Log(object message)
+    {
+        Debug.Log("---------| " + message + " |---------"); 
+    }
 }
