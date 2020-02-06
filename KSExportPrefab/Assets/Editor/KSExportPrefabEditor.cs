@@ -12,7 +12,7 @@ public class KSExportPrefabEditor
     [MenuItem("KSMenu/Export Prefab")]
     static void ExportPrefab()
     {
-        string exportPath = @"I:\GitHub\UISuper\UISuper\UISuper";
+        string exportPath = @"F:\Prefab";
 #if UNITY_STANDALONE_WIN
         exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -29,22 +29,22 @@ public class KSExportPrefabEditor
         {
             //导出资源
             ExportAssets(exportAssets[type], exportPath);
-            NoteExportList(type, exportAssets[type]);
+            NoteExportList(type, target.name, exportAssets[type]);
         }
         Debug.Log("执行完毕");
     }
 
     static void RecordPrefab(Dictionary<string, Dictionary<string, string>> exportAssets, GameObject target, KSObjectType type = KSObjectType.Prefab)
     {
-        if(target == null)
+        if (target == null)
         {
             return;
         }
-        if(type == KSObjectType.Prefab)
+        if (type == KSObjectType.Prefab)
         {
             InsetDictionary(exportAssets, KSAssetsType.Prefab, GetAssetPath(target.name, KSAssetsType.Prefab));
         }
-        
+
         Transform[] transforms = target.GetComponentsInChildren<Transform>();
         Type monoType = new MonoBehaviour().GetType();
 
@@ -71,7 +71,7 @@ public class KSExportPrefabEditor
         if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
         {//1、Script
             InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
-            
+
             while (type != monoType)
             {
                 type = type.BaseType;
@@ -89,7 +89,7 @@ public class KSExportPrefabEditor
             }
             //1.2 RawImage
             RawImage rawImage = component.GetComponent<RawImage>();
-            if(rawImage != null)
+            if (rawImage != null)
             {
                 RecordTexture(exportAssets, rawImage.mainTexture);
                 RecordMaterial(exportAssets, rawImage.material);
@@ -136,7 +136,7 @@ public class KSExportPrefabEditor
     }
     static void RecordMaterial(Dictionary<string, Dictionary<string, string>> exportAssets, Material material)
     {
-        if(material == null)
+        if (material == null)
         {
             return;
         }
@@ -289,9 +289,9 @@ public class KSExportPrefabEditor
         File.Copy(sourcePath + KSSuffix.meta, Path.Combine(exportPath, Path.GetFileName(fileName + KSSuffix.meta)), overwrite);
     }
 
-    static void NoteExportList(string filename, Dictionary<string, string> assets)
+    static void NoteExportList(string filename, string assetsName, Dictionary<string, string> assets)
     {
-        string notePath = Application.dataPath + KSPath.ExportNotes;
+        string notePath = Application.dataPath + KSPath.ExportNotes + assetsName + "/";
 
         if (!Directory.Exists(notePath))
         {
@@ -390,6 +390,6 @@ public class KSDebug
 {
     public static void Log(object message)
     {
-        Debug.Log("---------| " + message + " |---------"); 
+        Debug.Log("---------| " + message + " |---------");
     }
 }
