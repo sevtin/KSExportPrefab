@@ -65,14 +65,14 @@ public class KSExportPrefabEditor
         }
     }
 
-    static List<string> unwanteds = KSUnwanted.GetUnwanteds();
+    static List<string> unwanted_scripts = KSUnwanted.GetUnwantedScripts();
     static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component, Type monoType)
     {
         Type type = component.GetType();
         string componentName = type.ToString();
         if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
         {//1、Script
-            if (unwanteds.Contains(componentName))
+            if (unwanted_scripts.Contains(componentName))
             {
                 return;
             }
@@ -331,9 +331,9 @@ public class KSExportPrefabEditor
 
 public static class KSUnwanted
 {
-    public static List<string> GetUnwanteds()
+    public static List<string> GetUnwantedScripts()
     {
-        List<string> unwanteds = new List<string> { "UIBackgroundPanel" };
+        List<string> unwanteds = new List<string> { "UnwantedScripts" };
         return unwanteds;
     }
 }
