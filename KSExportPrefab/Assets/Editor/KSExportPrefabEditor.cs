@@ -46,82 +46,94 @@ public class KSExportPrefabEditor
         }
 
         Transform[] transforms = target.GetComponentsInChildren<Transform>();
-        Type monoType = new MonoBehaviour().GetType();
-
+        
         foreach (Transform transform in transforms)
         {
             foreach (Component component in transform.GetComponents<Component>())
             {
-                RecordExportAsset(exportAssets, component, monoType);
+                RecordExportAsset(exportAssets, component);
             }
             for (int i = 0; i < transform.childCount; i++)
             {
                 GameObject child = transform.GetChild(i).gameObject;
                 foreach (Component component in child.GetComponents<Component>())
                 {
-                    RecordExportAsset(exportAssets, component, monoType);
+                    RecordExportAsset(exportAssets, component);
                 }
             }
         }
     }
 
-    static List<string> unwanted_scripts = KSUnwanted.GetUnwantedScripts();
-    static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component, Type monoType)
+    static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
     {
         Type type = component.GetType();
+        string typeName = type.Name;
         string componentName = type.ToString();
+
         if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
         {//1、Script
-            if (unwanted_scripts.Contains(componentName))
-            {
-                return;
-            }
-            InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
-
-            while (type != monoType)
-            {
-                type = type.BaseType;
-                if (type == monoType)
-                {
-                    break;
-                }
-                InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
-            }
-            //1.1 image
-            Image image = component.GetComponent<Image>();
-            if (image != null)
-            {
-                RecordSprite(exportAssets, image.sprite);
-            }
-            //1.2 RawImage
-            RawImage rawImage = component.GetComponent<RawImage>();
-            if (rawImage != null)
-            {
-                RecordTexture(exportAssets, rawImage.mainTexture);
-                RecordMaterial(exportAssets, rawImage.material);
-            }
+            RecordScript(exportAssets, component);
         }
-        else if (type.Name == KSComponentType.Image)
+        else if (typeName == KSComponentType.Image)
         {//2、Image
             Image image = component as Image;
             RecordSprite(exportAssets, image.sprite);
         }
-        else if (type.Name == KSComponentType.RawImage)
+        else if (typeName == KSComponentType.RawImage)
         {//3、RawImage
             RawImage rawImage = component as RawImage;
             RecordTexture(exportAssets, rawImage.mainTexture);
             RecordMaterial(exportAssets, rawImage.material);
         }
-        else if (type.Name == KSComponentType.SpriteRenderer)
+        else if (typeName == KSComponentType.SpriteRenderer)
         {//4、SpriteRenderer
             SpriteRenderer spriteRenderer = component as SpriteRenderer;
             RecordSprite(exportAssets, spriteRenderer.sprite);
         }
-        else if (type.Name == KSComponentType.ParticleSystemRenderer)
+        else if (typeName == KSComponentType.ParticleSystemRenderer)
         {//5、ParticleSystemRenderer
             ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
             RecordMaterial(exportAssets, systemRenderer.sharedMaterial);
         }
+    }
+
+    static List<string> unwanted_scripts = KSUnwanted.GetUnwantedScripts();
+    static Type monoType = new MonoBehaviour().GetType();
+    static void RecordScript(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
+    {
+        Type type = component.GetType();
+        string componentName = type.ToString();
+
+        if (unwanted_scripts.Contains(componentName))
+        {
+            return;
+        }
+        InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
+
+        //1.1 image
+        Image image = component.GetComponent<Image>();
+        if (image != null)
+        {
+            RecordSprite(exportAssets, image.sprite);
+        }
+        //1.2 RawImage
+        RawImage rawImage = component.GetComponent<RawImage>();
+        if (rawImage != null)
+        {
+            RecordTexture(exportAssets, rawImage.mainTexture);
+            RecordMaterial(exportAssets, rawImage.material);
+        }
+        //1.3 Super
+        while (type != monoType)
+        {
+            type = type.BaseType;
+            if (type == monoType)
+            {
+                break;
+            }
+            InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
+        }
+        
     }
 
     static void RecordTexture(Dictionary<string, Dictionary<string, string>> exportAssets, Texture texture)
