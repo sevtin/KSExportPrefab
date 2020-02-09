@@ -402,9 +402,9 @@ MonoBehaviour:
   m_SceneHierarchy:
     m_TreeViewState:
       scrollPos: {x: 0, y: 0}
-      m_SelectedIDs: 72270000
+      m_SelectedIDs: 6c260000
       m_LastClickedID: 0
-      m_ExpandedIDs: befbffffc0fbffffba280000d2280000
+      m_ExpandedIDs: a4fbffffaefbffffbefbffffc0fbffffba280000d2280000
       m_RenameOverlay:
         m_UserAcceptedRename: 0
         m_Name: 
@@ -570,21 +570,21 @@ MonoBehaviour:
     m_SelectedInstanceIDs: 
     m_LastClickedInstanceID: 0
     m_HadKeyboardFocusLastEvent: 1
-    m_ExpandedInstanceIDs: b6260000b4260000ba260000b826000000000000882c0000
+    m_ExpandedInstanceIDs: b6260000b4260000ba260000b826000000000000882c000042260000
     m_RenameOverlay:
       m_UserAcceptedRename: 0
-      m_Name: 
-      m_OriginalName: 
+      m_Name: KSPrefab
+      m_OriginalName: KSPrefab
       m_EditFieldRect:
         serializedVersion: 2
         x: 0
         y: 0
         width: 0
         height: 0
-      m_UserData: 0
+      m_UserData: 9846
       m_IsWaitingForDelay: 0
       m_IsRenaming: 0
-      m_OriginalEventType: 11
+      m_OriginalEventType: 0
       m_IsRenamingFilename: 1
       m_ClientGUIView: {fileID: 2}
     m_CreateAssetUtility:

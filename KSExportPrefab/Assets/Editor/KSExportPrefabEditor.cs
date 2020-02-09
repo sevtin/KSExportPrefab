@@ -25,7 +25,7 @@ namespace KSMenuEditor
 
             //1、Prefab
             GameObject target = Selection.activeTransform.gameObject;
-            RecordPrefab(exportAssets, target);
+            RecordGo(exportAssets, target);
 
             foreach (string type in exportAssets.Keys)
             {
@@ -36,7 +36,7 @@ namespace KSMenuEditor
             Debug.Log("执行完毕");
         }
 
-        static void RecordPrefab(Dictionary<string, Dictionary<string, string>> exportAssets, GameObject target, KSObjectType type = KSObjectType.Prefab)
+        static void RecordGo(Dictionary<string, Dictionary<string, string>> exportAssets, GameObject target, KSObjectType type = KSObjectType.Prefab)
         {
             if (target == null)
             {
