@@ -64,12 +64,18 @@ public class KSExportPrefabEditor
             }
         }
     }
+
+    static List<string> unwanteds = KSUnwanted.GetUnwanteds();
     static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component, Type monoType)
     {
         Type type = component.GetType();
         string componentName = type.ToString();
         if (componentName.StartsWith(KSComponentType.UnityEngine) == false)
         {//1、Script
+            if (unwanteds.Contains(componentName))
+            {
+                return;
+            }
             InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
 
             while (type != monoType)
@@ -320,6 +326,15 @@ public class KSExportPrefabEditor
             //销毁资源
             file.Dispose();
         }
+    }
+}
+
+public static class KSUnwanted
+{
+    public static List<string> GetUnwanteds()
+    {
+        List<string> unwanteds = new List<string> { "UIBackgroundPanel" };
+        return unwanteds;
     }
 }
 

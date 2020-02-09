@@ -1,4 +1,3 @@
-Assets/Scripts/UI/UIBackgroundPanel.cs
 Assets/Scripts/Category/KSImage.cs
 Assets/Scripts/UI/UIAffirmButton.cs
 Assets/Scripts/UI/UIBarPanel.cs
