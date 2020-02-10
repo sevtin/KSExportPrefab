@@ -97,10 +97,15 @@ namespace KSMenuEditor
                 ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
                 RecordMaterial(exportAssets, systemRenderer.sharedMaterial);
             }
+            else if (typeName == KSComponentType.Animator)
+            {//5、Animator
+                Animator animator = component as Animator;
+                RecordAnimator(exportAssets, animator);
+            }
         }
 
         static List<string> unwanted_scripts = KSUnwanted.GetUnwantedScripts();
-        static Type monoType = new MonoBehaviour().GetType();
+        static Type monoType = typeof(MonoBehaviour);
         static void RecordScript(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
         {
             Type type = component.GetType();
@@ -162,12 +167,40 @@ namespace KSMenuEditor
             }
             NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
             if (material.shader != null)
-            {//6、Shader
+            {//Shader
                 NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
             }
             if (material.mainTexture != null)
-            {//7、Image
+            {//Image
                 NotesAssetsPath(exportAssets, KSAssetsType.Image, material.mainTexture);
+            }
+        }
+
+        static void RecordAnimator(Dictionary<string, Dictionary<string, string>> exportAssets, Animator animator)
+        {
+            if (animator == null)
+            {
+                return;
+            }
+            RuntimeAnimatorController runtimeAnimatorController = animator.runtimeAnimatorController;
+            NotesAssetsPath(exportAssets, KSAssetsType.Animator, runtimeAnimatorController);
+
+            foreach (AnimationClip clip in runtimeAnimatorController.animationClips)
+            {
+                /*
+                foreach (EditorCurveBinding binding in AnimationUtility.GetCurveBindings(clip))
+                {
+                    AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
+                }
+                */
+                foreach (EditorCurveBinding binding in AnimationUtility.GetObjectReferenceCurveBindings(clip))
+                {
+                    if (binding.type == typeof(SpriteRenderer))
+                    {
+                        KSDebug.Log(binding.propertyName);
+                    }
+                }
+                NotesAssetsPath(exportAssets, KSAssetsType.AnimationClip, clip);
             }
         }
 
@@ -366,6 +399,9 @@ namespace KSMenuEditor
         public const string Super = "KSSuper";
         public const string Shader = "KSShader";
         public const string Material = "KSMaterial";
+        //public const string Animation = "KSAnimation";
+        public const string Animator = "KSAnimator";
+        public const string AnimationClip = "KSAnimationClip";
 
         public static string GetSuffixName(string type)
         {
@@ -382,8 +418,13 @@ namespace KSMenuEditor
                     return KSSuffix.mat;
                 case Shader:
                     return KSSuffix.shader;
+                case AnimationClip:
+                    return KSSuffix.anim;
+                case Animator:
+                    return KSSuffix.controller;
+                default:
+                    return string.Empty;
             }
-            return string.Empty;
         }
     }
 
@@ -397,6 +438,8 @@ namespace KSMenuEditor
         public const string shader = ".shader";
         public const string meta = ".meta";
         public const string txt = ".txt";
+        public const string anim = ".anim";
+        public const string controller = ".controller";
     }
 
     public static class KSComponentType
@@ -407,6 +450,9 @@ namespace KSMenuEditor
         public const string SpriteRenderer = "SpriteRenderer";
         public const string ParticleSystemRenderer = "ParticleSystemRenderer";
         public const string Texture = "Texture";
+        //public const string Animation = "Animation";
+        public const string Animator = "Animator";
+        public const string AnimationClip = "AnimationClip";
     }
 
     enum KSObjectType
