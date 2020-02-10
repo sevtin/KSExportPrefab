@@ -1,7 +1,7 @@
 # ExportPrefab
 KSExportPrefab
 
-支持以下资源自动化到处：
+支持以下资源自动化导出：
 1、Script
 2、Image
 3、RawImage
