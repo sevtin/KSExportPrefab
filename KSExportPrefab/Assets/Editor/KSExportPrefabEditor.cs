@@ -14,7 +14,7 @@ namespace KSMenuEditor
         [MenuItem("KSMenu/Export Prefab")]
         static void ExportPrefab()
         {
-            string exportPath = @"F:\Prefab";
+            string exportPath = @"F:\Unity\Export\Assets";
 #if UNITY_STANDALONE_WIN
             exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -98,7 +98,7 @@ namespace KSMenuEditor
                 RecordMaterial(exportAssets, systemRenderer.sharedMaterial);
             }
             else if (typeName == KSComponentType.Animator)
-            {//5、Animator
+            {//6、Animator
                 Animator animator = component as Animator;
                 RecordAnimator(exportAssets, animator);
             }
@@ -151,6 +151,7 @@ namespace KSMenuEditor
             }
             NotesAssetsPath(exportAssets, KSAssetsType.Image, texture);
         }
+
         static void RecordSprite(Dictionary<string, Dictionary<string, string>> exportAssets, Sprite sprite)
         {
             if (sprite == null)
@@ -159,6 +160,7 @@ namespace KSMenuEditor
             }
             NotesAssetsPath(exportAssets, KSAssetsType.Image, sprite);
         }
+
         static void RecordMaterial(Dictionary<string, Dictionary<string, string>> exportAssets, Material material)
         {
             if (material == null)
@@ -193,11 +195,16 @@ namespace KSMenuEditor
                     AnimationCurve curve = AnimationUtility.GetEditorCurve(clip, binding);
                 }
                 */
+                Type type = typeof(SpriteRenderer);
                 foreach (EditorCurveBinding binding in AnimationUtility.GetObjectReferenceCurveBindings(clip))
                 {
-                    if (binding.type == typeof(SpriteRenderer))
+                    if (binding.type == type)
                     {
-                        KSDebug.Log(binding.propertyName);
+                        ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(clip, binding);
+                        foreach (ObjectReferenceKeyframe keyframe in keyframes)
+                        {
+                            RecordSprite(exportAssets, keyframe.value as Sprite);
+                        }
                     }
                 }
                 NotesAssetsPath(exportAssets, KSAssetsType.AnimationClip, clip);

@@ -72,15 +72,13 @@
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSMaterial.txt" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSScript.txt" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSPrefab.txt" />
-    <None Include="Assets\Resources\ExportNotes\MyAnimator\KSAnimator.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSAnimator.txt" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSImage.txt" />
-    <None Include="Assets\Resources\ExportNotes\MyAnimator\KSPrefab.txt" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSSuper.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSAnimationClip.txt" />
     <None Include="Assets\Resources\Shader\custom-add-ui.shader" />
-    <None Include="Assets\Resources\ExportNotes\MyAnimator\KSAnimationClip.txt" />
     <None Include="Assets\Resources\Shader\custom-particle-alphablend_rgba.shader" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSShader.txt" />
-    <None Include="Assets\Resources\ExportNotes\MyAnimator\KSImage.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>F:/GitHub/ExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>
