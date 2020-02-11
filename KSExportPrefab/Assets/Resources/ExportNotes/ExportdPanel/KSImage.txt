@@ -5,4 +5,5 @@ Assets/Resources/Images/star_gold.jpg
 Assets/Resources/Images/General_205.png
 Assets/Resources/Images/General_406.png
 Assets/Resources/Images/General_803.png
+Assets/Resources/Images/Model_2.png
 Assets/Resources/Images/ic_launcher-web.png

@@ -10,7 +10,6 @@ namespace KSMenuEditor
 {
     public class KSExportPrefabEditor
     {
-
         [MenuItem("KSMenu/Export Prefab")]
         static void ExportPrefab()
         {
@@ -23,7 +22,7 @@ namespace KSMenuEditor
             //记录导出的资源
             Dictionary<string, Dictionary<string, string>> exportAssets = new Dictionary<string, Dictionary<string, string>>();
 
-            //1、Prefab
+            //Prefab
             GameObject target = Selection.activeTransform.gameObject;
             RecordGo(exportAssets, target);
 
@@ -79,18 +78,17 @@ namespace KSMenuEditor
             else if (typeName == KSComponentType.Image)
             {//2、Image
                 Image image = component as Image;
-                RecordSprite(exportAssets, image.sprite);
+                RecordImage(exportAssets, image);
             }
             else if (typeName == KSComponentType.RawImage)
             {//3、RawImage
                 RawImage rawImage = component as RawImage;
-                RecordTexture(exportAssets, rawImage.mainTexture);
-                RecordMaterial(exportAssets, rawImage.material);
+                RecordRawImage(exportAssets, rawImage);
             }
             else if (typeName == KSComponentType.SpriteRenderer)
             {//4、SpriteRenderer
                 SpriteRenderer spriteRenderer = component as SpriteRenderer;
-                RecordSprite(exportAssets, spriteRenderer.sprite);
+                RecordSpriteRenderer(exportAssets, spriteRenderer);
             }
             else if (typeName == KSComponentType.ParticleSystemRenderer)
             {//5、ParticleSystemRenderer
@@ -119,17 +117,12 @@ namespace KSMenuEditor
 
             //1.1 image
             Image image = component.GetComponent<Image>();
-            if (image != null)
-            {
-                RecordSprite(exportAssets, image.sprite);
-            }
+            RecordImage(exportAssets, image);
+
             //1.2 RawImage
             RawImage rawImage = component.GetComponent<RawImage>();
-            if (rawImage != null)
-            {
-                RecordTexture(exportAssets, rawImage.mainTexture);
-                RecordMaterial(exportAssets, rawImage.material);
-            }
+            RecordRawImage(exportAssets, rawImage);
+
             //1.3 Super
             while (type != monoType)
             {
@@ -143,15 +136,6 @@ namespace KSMenuEditor
 
         }
 
-        static void RecordTexture(Dictionary<string, Dictionary<string, string>> exportAssets, Texture texture)
-        {
-            if (texture == null)
-            {
-                return;
-            }
-            NotesAssetsPath(exportAssets, KSAssetsType.Image, texture);
-        }
-
         static void RecordSprite(Dictionary<string, Dictionary<string, string>> exportAssets, Sprite sprite)
         {
             if (sprite == null)
@@ -161,16 +145,61 @@ namespace KSMenuEditor
             NotesAssetsPath(exportAssets, KSAssetsType.Image, sprite);
         }
 
+        static void RecordTexture(Dictionary<string, Dictionary<string, string>> exportAssets, Texture texture)
+        {
+            if (texture == null)
+            {
+                return;
+            }
+            NotesAssetsPath(exportAssets, KSAssetsType.Image, texture);
+        }
+
+        static void RecordImage(Dictionary<string, Dictionary<string, string>> exportAssets, Image image)
+        {
+            if (image == null)
+            {
+                return;
+            }
+            RecordSprite(exportAssets, image.sprite);
+            RecordMaterial(exportAssets, image.material);
+        }
+
+        static void RecordRawImage(Dictionary<string, Dictionary<string, string>> exportAssets, RawImage rawImage)
+        {
+            if (rawImage == null)
+            {
+                return;
+            }
+            RecordTexture(exportAssets, rawImage.mainTexture);
+            RecordMaterial(exportAssets, rawImage.material);
+        }
+
+        static void RecordSpriteRenderer(Dictionary<string, Dictionary<string, string>> exportAssets, SpriteRenderer spriteRenderer)
+        {
+            if (spriteRenderer == null)
+            {
+                return;
+            }
+            RecordSprite(exportAssets, spriteRenderer.sprite);
+            RecordMaterial(exportAssets, spriteRenderer.material);
+        }
+
         static void RecordMaterial(Dictionary<string, Dictionary<string, string>> exportAssets, Material material)
         {
             if (material == null)
             {
                 return;
             }
-            NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
+            if(material.name.StartsWith(KSUnwanted.MaterialDefault) == false)
+            {
+                NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
+            }
             if (material.shader != null)
             {//Shader
-                NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
+                if(material.shader.name.StartsWith(KSUnwanted.ShaderDefault) == false)
+                {
+                    NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
+                }
             }
             if (material.mainTexture != null)
             {//Image
@@ -385,6 +414,9 @@ namespace KSMenuEditor
 
     public static class KSUnwanted
     {
+        public const string MaterialDefault = "Sprites-Default";
+        public const string ShaderDefault = "Sprites/Default";
+
         public static List<string> GetUnwantedScripts()
         {
             List<string> unwanteds = new List<string> { "UnwantedScripts" };
