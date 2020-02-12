@@ -67,6 +67,11 @@ namespace KSMenuEditor
 
         static void RecordExportAsset(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
         {
+            if (component == null)
+            {
+                return;
+            }
+
             Type type = component.GetType();
             string typeName = type.Name;
             string componentName = type.ToString();
@@ -190,13 +195,13 @@ namespace KSMenuEditor
             {
                 return;
             }
-            if(material.name.StartsWith(KSUnwanted.MaterialDefault) == false)
+            if (material.name.StartsWith(KSUnwanted.MaterialDefault) == false)
             {
                 NotesAssetsPath(exportAssets, KSAssetsType.Material, material);
             }
             if (material.shader != null)
             {//Shader
-                if(material.shader.name.StartsWith(KSUnwanted.ShaderDefault) == false)
+                if (material.shader.name.StartsWith(KSUnwanted.ShaderDefault) == false)
                 {
                     NotesAssetsPath(exportAssets, KSAssetsType.Shader, material.shader);
                 }
