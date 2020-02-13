@@ -451,7 +451,7 @@ namespace KSMenuEditor
 
         public static List<string> GetUnwantedScripts()
         {
-            List<string> unwanteds = new List<string> { "UnwantedScripts" };
+            List<string> unwanteds = new List<string> { "UICustomTextFont" };
             return unwanteds;
         }
     }
