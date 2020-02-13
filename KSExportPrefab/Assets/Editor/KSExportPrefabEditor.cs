@@ -80,28 +80,32 @@ namespace KSMenuEditor
             {//1、Script
                 RecordScript(exportAssets, component);
             }
+            if (componentName.StartsWith(KSComponentType.UnityEngineUI))
+            {//2、自定义UI
+                RecordUI(exportAssets, component);
+            }
             else if (typeName == KSComponentType.Image)
-            {//2、Image
+            {//3、Image
                 Image image = component as Image;
                 RecordImage(exportAssets, image);
             }
             else if (typeName == KSComponentType.RawImage)
-            {//3、RawImage
+            {//4、RawImage
                 RawImage rawImage = component as RawImage;
                 RecordRawImage(exportAssets, rawImage);
             }
             else if (typeName == KSComponentType.SpriteRenderer)
-            {//4、SpriteRenderer
+            {//5、SpriteRenderer
                 SpriteRenderer spriteRenderer = component as SpriteRenderer;
                 RecordSpriteRenderer(exportAssets, spriteRenderer);
             }
             else if (typeName == KSComponentType.ParticleSystemRenderer)
-            {//5、ParticleSystemRenderer
+            {//6、ParticleSystemRenderer
                 ParticleSystemRenderer systemRenderer = component as ParticleSystemRenderer;
                 RecordMaterial(exportAssets, systemRenderer.sharedMaterial);
             }
             else if (typeName == KSComponentType.Animator)
-            {//6、Animator
+            {//7、Animator
                 Animator animator = component as Animator;
                 RecordAnimator(exportAssets, animator);
             }
@@ -120,15 +124,15 @@ namespace KSMenuEditor
             }
             InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
 
-            //1.1 image
+            //1 image
             Image image = component.GetComponent<Image>();
             RecordImage(exportAssets, image);
 
-            //1.2 RawImage
+            //2 RawImage
             RawImage rawImage = component.GetComponent<RawImage>();
             RecordRawImage(exportAssets, rawImage);
 
-            //1.3 Super
+            //3 Super
             while (type != monoType)
             {
                 type = type.BaseType;
@@ -139,6 +143,29 @@ namespace KSMenuEditor
                 InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
             }
 
+        }
+
+        static void RecordUI(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
+        {
+            Type type = component.GetType();
+            string componentName = type.ToString();
+
+            if (unwanted_scripts.Contains(componentName))
+            {
+                return;
+            }
+            string[] strArray = componentName.Split('.');
+            if (strArray.Length > 0)
+            {
+                InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(strArray[strArray.Length - 1], KSAssetsType.Script));
+            }
+            //1 image
+            Image image = component.GetComponent<Image>();
+            RecordImage(exportAssets, image);
+
+            //2 RawImage
+            RawImage rawImage = component.GetComponent<RawImage>();
+            RecordRawImage(exportAssets, rawImage);
         }
 
         static void RecordSprite(Dictionary<string, Dictionary<string, string>> exportAssets, Sprite sprite)
@@ -489,6 +516,7 @@ namespace KSMenuEditor
     public static class KSComponentType
     {
         public const string UnityEngine = "UnityEngine";
+        public const string UnityEngineUI = "UnityEngine.UI.KS";
         public const string Image = "Image";
         public const string RawImage = "RawImage";
         public const string SpriteRenderer = "SpriteRenderer";
