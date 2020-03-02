@@ -80,7 +80,7 @@ namespace KSMenuEditor
             {//1、Script
                 RecordScript(exportAssets, component);
             }
-            if (componentName.StartsWith(KSComponentType.UnityEngineUI))
+            else if (componentName.StartsWith(KSComponentType.UnityEngineUI))
             {//2、自定义UI
                 RecordUI(exportAssets, component);
             }
