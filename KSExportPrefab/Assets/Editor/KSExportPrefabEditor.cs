@@ -272,6 +272,7 @@ namespace KSMenuEditor
             }
         }
 
+        static List<string> unwanted_images = KSUnwanted.GetUnwantedImages();
         static void NotesAssetsPath(Dictionary<string, Dictionary<string, string>> dict, string type, UnityEngine.Object obj)
         {
             string assetPath = AssetDatabase.GetAssetPath(obj);
@@ -279,6 +280,14 @@ namespace KSMenuEditor
             {
                 if (assetPath.EndsWith(KSSuffix.png) || assetPath.EndsWith(KSSuffix.jpg))
                 {
+                    if (unwanted_images.Count > 0)
+                    {
+                        string fileName = GetAssetName(assetPath);
+                        if (unwanted_images.Contains(fileName))
+                        {
+                            return;
+                        }
+                    }
                     InsetDictionary(dict, type, assetPath);
                 }
             }
@@ -324,7 +333,6 @@ namespace KSMenuEditor
                 }
             }
         }
-
         static Dictionary<string, string> GetAssetPaths(Dictionary<string, string> assets, string type)
         {
             Dictionary<string, string> paths = new Dictionary<string, string>();
@@ -345,7 +353,6 @@ namespace KSMenuEditor
             }
             return paths;
         }
-
         static string GetAssetPath(string guid, string filter, string type)
         {
             var assetPath = AssetDatabase.GUIDToAssetPath(guid);
@@ -452,6 +459,11 @@ namespace KSMenuEditor
         public static List<string> GetUnwantedScripts()
         {
             List<string> unwanteds = new List<string> { "UICustomTextFont" };
+            return unwanteds;
+        }
+        public static List<string> GetUnwantedImages()
+        {
+            List<string> unwanteds = new List<string> { "icon_E_48" };
             return unwanteds;
         }
     }
