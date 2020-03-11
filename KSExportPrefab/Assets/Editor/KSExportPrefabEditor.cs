@@ -13,7 +13,7 @@ namespace KSMenuEditor
         [MenuItem("KSMenu/Export Prefab")]
         static void ExportPrefab()
         {
-            string exportPath = @"F:\Unity\Export\Assets";
+            string exportPath = @"H:\UnityProject\MyEx";
 #if UNITY_STANDALONE_WIN
             exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -111,17 +111,12 @@ namespace KSMenuEditor
             }
         }
 
-        static List<string> unwanted_scripts = KSUnwanted.GetUnwantedScripts();
         static Type monoType = typeof(MonoBehaviour);
         static void RecordScript(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
         {
             Type type = component.GetType();
             string componentName = type.ToString();
 
-            if (unwanted_scripts.Contains(componentName))
-            {
-                return;
-            }
             InsetDictionary(exportAssets, KSAssetsType.Script, GetAssetPath(componentName, KSAssetsType.Script));
 
             //1 image
@@ -150,10 +145,6 @@ namespace KSMenuEditor
             Type type = component.GetType();
             string componentName = type.ToString();
 
-            if (unwanted_scripts.Contains(componentName))
-            {
-                return;
-            }
             string[] strArray = componentName.Split('.');
             if (strArray.Length > 0)
             {
@@ -272,7 +263,6 @@ namespace KSMenuEditor
             }
         }
 
-        static List<string> unwanted_images = KSUnwanted.GetUnwantedImages();
         static void NotesAssetsPath(Dictionary<string, Dictionary<string, string>> dict, string type, UnityEngine.Object obj)
         {
             string assetPath = AssetDatabase.GetAssetPath(obj);
@@ -280,14 +270,6 @@ namespace KSMenuEditor
             {
                 if (assetPath.EndsWith(KSSuffix.png) || assetPath.EndsWith(KSSuffix.jpg))
                 {
-                    if (unwanted_images.Count > 0)
-                    {
-                        string fileName = GetAssetName(assetPath);
-                        if (unwanted_images.Contains(fileName))
-                        {
-                            return;
-                        }
-                    }
                     InsetDictionary(dict, type, assetPath);
                 }
             }
@@ -300,12 +282,39 @@ namespace KSMenuEditor
             }
         }
 
+        static List<string> unwanted_scripts = KSUnwanted.GetUnwantedScripts();
+        static List<string> unwanted_images = KSUnwanted.GetUnwantedImages();
         static void InsetDictionary(Dictionary<string, Dictionary<string, string>> dict, string type, string value)
         {
             if (value == string.Empty)
             {
                 return;
             }
+            string fileName = GetAssetName(value);
+            if (unwanted_scripts.Count > 0)
+            {
+                if (type == KSAssetsType.Script || type == KSAssetsType.Super)
+                {
+                    if (unwanted_scripts.Contains(fileName))
+                    {
+                        return;
+                    }
+                }
+            }
+            if(unwanted_images.Count > 0)
+            {
+                if(type == KSAssetsType.Image)
+                {
+                    if (unwanted_images.Count > 0)
+                    {
+                        if (unwanted_images.Contains(fileName))
+                        {
+                            return;
+                        }
+                    }
+                }
+            }
+
             if (dict.ContainsKey(type) == false)
             {
                 dict.Add(type, new Dictionary<string, string>());
@@ -458,12 +467,12 @@ namespace KSMenuEditor
 
         public static List<string> GetUnwantedScripts()
         {
-            List<string> unwanteds = new List<string> { "UICustomTextFont", "UICustomButton", "EvonyImage", "FxImage", "EvonyText", "UIBtnTextColor" };
+            List<string> unwanteds = new List<string> { "UICustomTextFont.cs", "UICustomButton.cs", "EvonyImage.cs", "FxImage.cs", "EvonyText.cs", "UIBtnTextColor.cs", "UITopClass.cs" };
             return unwanteds;
         }
         public static List<string> GetUnwantedImages()
         {
-            List<string> unwanteds = new List<string> { "icon_E_48" };
+            List<string> unwanteds = new List<string> { "icon_E_48.png", "turntable_bg.png" };
             return unwanteds;
         }
     }
