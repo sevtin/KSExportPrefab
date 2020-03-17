@@ -13,7 +13,7 @@ namespace KSMenuEditor
         [MenuItem("KSMenu/Export Prefab")]
         static void ExportPrefab()
         {
-            string exportPath = @"H:\UnityProject\MyEx";
+            string exportPath = @"H:\UnityProject\LastPro";
 #if UNITY_STANDALONE_WIN
             exportPath = exportPath.Replace(@"\", "/");
 #endif
@@ -35,25 +35,33 @@ namespace KSMenuEditor
             Debug.Log("执行完毕");
         }
 
-        static void RecordGo(Dictionary<string, Dictionary<string, string>> exportAssets, GameObject target, KSObjectType type = KSObjectType.Prefab)
+        static void RecordGo(Dictionary<string, Dictionary<string, string>> exportAssets, GameObject target)
         {
             if (target == null)
             {
                 return;
             }
+            /*
             if (type == KSObjectType.Prefab)
             {
                 InsetDictionary(exportAssets, KSAssetsType.Prefab, GetAssetPath(target.name, KSAssetsType.Prefab));
-            }
+            }*/
 
             Transform[] transforms = target.GetComponentsInChildren<Transform>();
 
             foreach (Transform transform in transforms)
             {
+                string prefabPath = GetAssetPath(transform.name, KSAssetsType.Prefab, true);
+                if (prefabPath != string.Empty)
+                {
+                    InsetDictionary(exportAssets, KSAssetsType.Prefab, prefabPath);
+                }
+
                 foreach (Component component in transform.GetComponents<Component>())
                 {
                     RecordExportAsset(exportAssets, component);
                 }
+                
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     GameObject child = transform.GetChild(i).gameObject;
@@ -126,7 +134,7 @@ namespace KSMenuEditor
             //2 RawImage
             RawImage rawImage = component.GetComponent<RawImage>();
             RecordRawImage(exportAssets, rawImage);
-
+            
             //3 Super
             while (type != monoType)
             {
@@ -137,7 +145,6 @@ namespace KSMenuEditor
                 }
                 InsetDictionary(exportAssets, KSAssetsType.Super, GetAssetPath(type.ToString(), KSAssetsType.Script));
             }
-
         }
 
         static void RecordUI(Dictionary<string, Dictionary<string, string>> exportAssets, Component component)
@@ -204,7 +211,7 @@ namespace KSMenuEditor
                 return;
             }
             RecordSprite(exportAssets, spriteRenderer.sprite);
-            RecordMaterial(exportAssets, spriteRenderer.material);
+            RecordMaterial(exportAssets, spriteRenderer.sharedMaterial);
         }
 
         static void RecordMaterial(Dictionary<string, Dictionary<string, string>> exportAssets, Material material)
@@ -372,7 +379,7 @@ namespace KSMenuEditor
             return string.Empty;
         }
         */
-        static string GetAssetPath(string name, string type)
+        static string GetAssetPath(string name, string type,bool isPrefab = false)
         {
             string assetPath = string.Empty;
             string[] resules = AssetDatabase.FindAssets(name);
@@ -381,11 +388,16 @@ namespace KSMenuEditor
                 assetPath = AssetDatabase.GUIDToAssetPath(resules[i]);
                 if (assetPath != string.Empty)
                 {
-                    if (assetPath.EndsWith("/" + name + KSAssetsType.GetSuffixName(type)))
+                    string end = "/" + name + KSAssetsType.GetSuffixName(type);
+                    if (assetPath.EndsWith(end))
                     {
                         return assetPath;
                     }
                 }
+            }
+            if (isPrefab)
+            {
+                return string.Empty;
             }
             return assetPath;
         }
@@ -409,6 +421,7 @@ namespace KSMenuEditor
             return strArray[strArray.Length - 1];
         }
 
+      
         static void ExportAssets(string sourcePath, string exportPath, bool overwrite)
         {
             string fileName = GetAssetName(sourcePath);
@@ -467,12 +480,12 @@ namespace KSMenuEditor
 
         public static List<string> GetUnwantedScripts()
         {
-            List<string> unwanteds = new List<string> { "UICustomTextFont.cs", "UICustomButton.cs", "EvonyImage.cs", "FxImage.cs", "EvonyText.cs", "UIBtnTextColor.cs", "UITopClass.cs" };
+            List<string> unwanteds = new List<string> { "UICustomTextFont.cs", "UICustomButton.cs", "EvonyImage.cs", "FxImage.cs", "EvonyText.cs", "UIBtnTextColor.cs"};
             return unwanteds;
         }
         public static List<string> GetUnwantedImages()
         {
-            List<string> unwanteds = new List<string> { "icon_E_48.png", "turntable_bg.png" };
+            List<string> unwanteds = new List<string> { "icon_E_48.png"};
             return unwanteds;
         }
     }

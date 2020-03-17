@@ -1,1 +1,2 @@
 Assets/Resources/Prefabs/ExportdPanel.prefab
+Assets/Resources/Prefabs/MyAnimator.prefab
