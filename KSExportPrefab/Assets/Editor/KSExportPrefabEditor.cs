@@ -443,7 +443,7 @@ namespace KSMenuEditor
             {
                 KSDebug.Log("写入失败: " + fileName);
             }
-            
+
         }
 
         static void NoteExportList(string filename, string assetsName, Dictionary<string, string> assets)
@@ -487,7 +487,15 @@ namespace KSMenuEditor
 
         public static List<string> GetUnwantedScripts()
         {
-            List<string> unwanteds = new List<string> { "UICustomTextFont.cs", "UICustomButton.cs", "EvonyImage.cs", "FxImage.cs", "EvonyText.cs", "UIBtnTextColor.cs" };
+            List<string> unwanteds = new List<string> { "UICustomTextFont.cs",
+                "UICustomButton.cs",
+                "EvonyImage.cs",
+                "UIEmojiImage.cs",
+                "FxImage.cs",
+                "EvonyText.cs",
+                "UIEmojiText.cs",
+                "UIBtnTextColor.cs",
+                "UIFXObj.cs" };
             return unwanteds;
         }
         public static List<string> GetUnwantedImages()
