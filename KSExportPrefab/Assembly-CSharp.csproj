@@ -81,6 +81,7 @@
     <None Include="Assets\Resources\Shader\custom-particle-alphablend_rgba.shader" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSImage.txt" />
     <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSScript.txt" />
+    <None Include="Assets\Resources\ExportNotes\ExportdPanel\KSDirectory.txt" />
     <Reference Include="Unity.TextMeshPro.Editor">
       <HintPath>I:/GitHub/KSExportPrefab/KSExportPrefab/Library/ScriptAssemblies/Unity.TextMeshPro.Editor.dll</HintPath>
     </Reference>

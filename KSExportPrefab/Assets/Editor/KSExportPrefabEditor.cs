@@ -40,6 +40,7 @@ namespace KSMenuEditor
                 //记录原路径
                 NoteExportList(type, target.name, exportAssets[type]);
             }
+            NoteDirectorys(target.name);
             Debug.Log("执行完毕");
         }
 
@@ -428,6 +429,16 @@ namespace KSMenuEditor
             return strArray[strArray.Length - 1];
         }
 
+        static string GetDirectoryPath(string path)
+        {
+            string[] strArray = path.Split('/');
+            if (strArray.Length == 0)
+            {
+                return string.Empty;
+            }
+            return path.Substring(0, path.Length - strArray[strArray.Length - 1].Length);
+        }
+
         static bool isOverride = false;
         static void ExportAssets(string sourcePath, string exportPath)
         {
@@ -452,6 +463,23 @@ namespace KSMenuEditor
                 KSDebug.Log("写入失败: " + fileName);
                 InsetDictionary(KSAssetsType.Error, sourcePath);
             }
+        }
+
+        static void NoteDirectorys(string name)
+        {
+            Dictionary<string, string> directory = new Dictionary<string, string>();
+            foreach (string type in exportAssets.Keys)
+            {
+                foreach (string file in exportAssets[type].Keys)
+                {
+                    string path = GetDirectoryPath(file);
+                    if (directory.ContainsKey(path) == false)
+                    {
+                        directory[path] = path;
+                    }
+                }
+            }
+            NoteExportList(KSAssetsType.Directory, name, directory);
         }
 
         static void NoteExportList(string filename, string assetsName, Dictionary<string, string> assets)
@@ -531,6 +559,7 @@ namespace KSMenuEditor
         public const string Animator = "KSAnimator";
         public const string AnimationClip = "KSAnimationClip";
         public const string Error = "KSError";
+        public const string Directory = "KSDirectory";
 
         public static string GetSuffixName(string type)
         {

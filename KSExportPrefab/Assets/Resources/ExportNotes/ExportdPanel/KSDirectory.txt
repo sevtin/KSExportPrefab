@@ -1,0 +1,14 @@
+Assets/Resources/Prefabs/
+Assets/Scripts/UI/
+Assets/Scripts/Category/
+Assets/Resources/Images/
+Assets/Resources/Material/
+Assets/Resources/Shader/
+Assets/Resources/Animation/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Resources/Prefabs/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Scripts/UI/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Scripts/Category/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Resources/Images/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Resources/Material/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Resources/Shader/
+I:/GitHub/KSExportPrefab/KSExportPrefab/Assets/Resources/Animation/
