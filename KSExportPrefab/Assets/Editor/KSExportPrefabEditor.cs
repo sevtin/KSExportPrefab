@@ -61,7 +61,7 @@ namespace KSMenuEditor
                 {
                     RecordExportAsset(exportAssets, component);
                 }
-                
+
                 for (int i = 0; i < transform.childCount; i++)
                 {
                     GameObject child = transform.GetChild(i).gameObject;
@@ -134,7 +134,7 @@ namespace KSMenuEditor
             //2 RawImage
             RawImage rawImage = component.GetComponent<RawImage>();
             RecordRawImage(exportAssets, rawImage);
-            
+
             //3 Super
             while (type != monoType)
             {
@@ -308,9 +308,9 @@ namespace KSMenuEditor
                     }
                 }
             }
-            if(unwanted_images.Count > 0)
+            if (unwanted_images.Count > 0)
             {
-                if(type == KSAssetsType.Image)
+                if (type == KSAssetsType.Image)
                 {
                     if (unwanted_images.Count > 0)
                     {
@@ -379,7 +379,7 @@ namespace KSMenuEditor
             return string.Empty;
         }
         */
-        static string GetAssetPath(string name, string type,bool isPrefab = false)
+        static string GetAssetPath(string name, string type, bool isPrefab = false)
         {
             string assetPath = string.Empty;
             string[] resules = AssetDatabase.FindAssets(name);
@@ -404,10 +404,9 @@ namespace KSMenuEditor
 
         static void ExportAssets(Dictionary<string, string> sourcePaths, string exportPath)
         {
-            bool overwrite = true;
             foreach (string path in sourcePaths.Keys)
             {
-                ExportAssets(path, exportPath, overwrite);
+                ExportAssets(path, exportPath);
             }
         }
 
@@ -421,8 +420,8 @@ namespace KSMenuEditor
             return strArray[strArray.Length - 1];
         }
 
-      
-        static void ExportAssets(string sourcePath, string exportPath, bool overwrite)
+        static bool isOverride = false;
+        static void ExportAssets(string sourcePath, string exportPath)
         {
             string fileName = GetAssetName(sourcePath);
             if (fileName == string.Empty)
@@ -432,11 +431,19 @@ namespace KSMenuEditor
             exportPath = exportPath + sourcePath.Replace(fileName, "");
             sourcePath = Application.dataPath + sourcePath.Replace(KSPath.Assets, "");
             if (!Directory.Exists(exportPath))
-            {
+            {//目录
                 Directory.CreateDirectory(exportPath);
             }
-            File.Copy(sourcePath, Path.Combine(exportPath, Path.GetFileName(fileName)), overwrite);
-            File.Copy(sourcePath + KSSuffix.meta, Path.Combine(exportPath, Path.GetFileName(fileName + KSSuffix.meta)), overwrite);
+            try
+            {
+                File.Copy(sourcePath, Path.Combine(exportPath, Path.GetFileName(fileName)), isOverride);
+                File.Copy(sourcePath + KSSuffix.meta, Path.Combine(exportPath, Path.GetFileName(fileName + KSSuffix.meta)), isOverride);
+            }
+            catch
+            {
+                KSDebug.Log("写入失败: " + fileName);
+            }
+            
         }
 
         static void NoteExportList(string filename, string assetsName, Dictionary<string, string> assets)
@@ -480,12 +487,12 @@ namespace KSMenuEditor
 
         public static List<string> GetUnwantedScripts()
         {
-            List<string> unwanteds = new List<string> { "UICustomTextFont.cs", "UICustomButton.cs", "EvonyImage.cs", "FxImage.cs", "EvonyText.cs", "UIBtnTextColor.cs"};
+            List<string> unwanteds = new List<string> { "UICustomTextFont.cs", "UICustomButton.cs", "EvonyImage.cs", "FxImage.cs", "EvonyText.cs", "UIBtnTextColor.cs" };
             return unwanteds;
         }
         public static List<string> GetUnwantedImages()
         {
-            List<string> unwanteds = new List<string> { "icon_E_48.png"};
+            List<string> unwanteds = new List<string> { "icon_E_48.png" };
             return unwanteds;
         }
     }
